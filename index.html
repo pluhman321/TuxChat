@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxChat - Secure Messaging</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>TuxChat</h1>
+        <p>A secure messaging application with end-to-end encryption.</p>
+    </header>
+    
+    <section id="auth">
+        <h2>Sign Up / Sign In</h2>
+        <div id="authForms">
+            <input type="text" id="authUsername" placeholder="Enter username..." />
+            <input type="password" id="authPassword" placeholder="Enter password..." />
+            <button id="signUpButton">Sign Up</button>
+            <button id="signInButton">Sign In</button>
+        </div>
+    </section>
+    
+    <section id="chat" style="display: none;">
+        <h2>Chat</h2>
+        <div id="userSetup">
+            <label for="username">Username:</label>
+            <input type="text" id="username" disabled />
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="file" id="profilePicture" accept="image/*" />
+        </div>
+        <div id="messageControls">
+            <label for="recipient">Send to:</label>
+            <select id="recipient">
+                <option value="all">Send to Everyone</option>
+            </select>
+            <input type="text" id="messageInput" placeholder="Type a message..." />
+            <button id="sendButton">Send</button>
+        </div>
+        <div id="messagesContainer"></div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 TuxChat. All rights reserved.</p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
