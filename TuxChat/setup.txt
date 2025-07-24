@@ -1,0 +1,3 @@
+cd desktop
+cd tuxchat
+python3 minimal_backend.py
