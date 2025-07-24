@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxChat - Secure Messaging</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Auth Screen -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="logo">
+                    <span class="logo-icon">🐧</span>
+                    <h1>TuxChat</h1>
+                </div>
+                <p class="tagline">Secure messaging with style</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button id="signinTab" class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+                <button id="signupTab" class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <form id="authForm" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="authUsername" placeholder="Username" required>
+                    <span class="input-icon">👤</span>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="authPassword" placeholder="Password" required>
+                    <span class="input-icon">🔒</span>
+                </div>
+
+                <button type="submit" id="authButton" class="auth-btn">
+                    <span class="btn-text">Sign In</span>
+                    <div class="btn-spinner"></div>
+                </button>
+
+                <div id="authError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Chat App -->
+    <div id="chatApp" class="chat-app" style="display: none;">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="header-left">
+                <div class="logo-small">
+                    <span class="logo-icon">🐧</span>
+                    <span class="app-name">TuxChat</span>
+                </div>
+                <div class="online-indicator">
+                    <div class="status-dot pulse"></div>
+                    <span id="onlineCount">Online</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="user-profile" id="currentUserProfile">
+                    <img id="currentUserAvatar" class="user-avatar" src="" alt="You" style="display: none;">
+                    <div id="currentUserInitials" class="user-initials">U</div>
+                    <span id="currentUserName" class="username">User</span>
+                </div>
+                
+                <button id="settingsBtn" class="header-btn" title="Settings">
+                    <span>⚙️</span>
+                </button>
+                
+                <button id="themeToggle" class="header-btn" title="Toggle Theme">
+                    <span id="themeIcon">🌙</span>
+                </button>
+                
+                <button id="logoutBtn" class="header-btn logout-btn" title="Logout">
+                    <span>🚪</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="chat-main">
+            <!-- Sidebar -->
+            <aside class="chat-sidebar">
+                <div class="sidebar-section">
+                    <div class="section-header">
+                        <h3>Send Message To</h3>
+                    </div>
+                    <select id="recipient" class="recipient-select">
+                        <option value="all">🌍 Everyone</option>
+                    </select>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="section-header">
+                        <h3>Online Users</h3>
+                        <span id="userCount" class="count-badge">0</span>
+                    </div>
+                    <div id="usersList" class="users-list">
+                        <div class="no-users">No other users online</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <main class="chat-content">
+                <div id="messagesContainer" class="messages-container">
+                    <div class="welcome-banner">
+                        <div class="welcome-icon">🎉</div>
+                        <h2>Welcome to TuxChat!</h2>
+                        <p>Your messages are secure. Start chatting below!</p>
+                    </div>
+                </div>
+
+                <!-- Fixed Message Input -->
+                <div class="message-input-area">
+                    <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <span class="typing-dots">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span class="typing-text">Someone is typing...</span>
+                    </div>
+                    
+                    <div class="message-input-container">
+                        <button id="attachBtn" class="input-btn attach-btn" title="Attach File">
+                            <span>📎</span>
+                        </button>
+                        
+                        <div class="message-input-wrapper">
+                            <input type="text" 
+                                   id="messageInput" 
+                                   placeholder="Type your message..." 
+                                   maxlength="1000"
+                                   autocomplete="off">
+                            <div class="char-counter">
+                                <span id="charCount">0</span>/1000
+                            </div>
+                        </div>
+                        
+                        <button id="sendBtn" class="input-btn send-btn" title="Send Message">
+                            <span class="send-icon">🚀</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="closeSettings" class="close-btn">✕</button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="settings-section">
+                    <h3>Profile</h3>
+                    
+                    <div class="profile-upload">
+                        <div class="current-profile">
+                            <img id="settingsAvatar" class="profile-preview" src="" alt="Profile" style="display: none;">
+                            <div id="settingsInitials" class="profile-preview-initials">U</div>
+                        </div>
+                        
+                        <div class="upload-controls">
+                            <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                            <button id="uploadBtn" class="settings-btn">
+                                <span>📷</span> Change Picture
+                            </button>
+                            <button id="removePhotoBtn" class="settings-btn secondary">
+                                <span>🗑️</span> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    
+                    <div class="theme-selector">
+                        <div class="theme-option" data-theme="dark">
+                            <div class="theme-preview dark-preview">
+                                <div class="preview-header"></div>
+                                <div class="preview-content">
+                                    <div class="preview-message"></div>
+                                    <div class="preview-message own"></div>
+                                </div>
+                            </div>
+                            <span>Dark Mode</span>
+                            <input type="radio" name="theme" value="dark" checked>
+                        </div>
+                        
+                        <div class="theme-option" data-theme="light">
+                            <div class="theme-preview light-preview">
+                                <div class="preview-header"></div>
+                                <div class="preview-content">
+                                    <div class="preview-message"></div>
+                                    <div class="preview-message own"></div>
+                                </div>
+                            </div>
+                            <span>Light Mode</span>
+                            <input type="radio" name="theme" value="light">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Notifications</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="soundNotifications" checked>
+                            <span class="checkmark"></span>
+                            Sound notifications
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="desktopNotifications" checked>
+                            <span class="checkmark"></span>
+                            Desktop notifications
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button id="saveSettings" class="settings-btn primary">
+                        <span>💾</span> Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
